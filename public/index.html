@@ -47,7 +47,7 @@
         <div class="form-tools">
             <label class="file-picker" for="post-image"><span aria-hidden="true">＋</span> Add image</label>
             <input id="post-image" name="image" type="file" accept=".jpg,.jpeg,.jpe,.pjpeg,.png,.apng,.gif,.webp,.bmp,.dib,.tif,.tiff,.ptif,.avif,.heic,.heif,.svg,.svgz,.jng,.jp2,.j2k,.j2c,.jpc,.jpt,.jpm,.jps,.mpo,.pbm,.pgm,.ppm,.pnm,.pam,.wbmp" hidden>
-            <span id="file-name" class="file-name">30+ formats · 20 MB source · compressed to 2 MB</span>
+            <span id="file-name" class="file-name">30+ formats · metadata removed · compressed to 2 MB</span>
             <span id="image-status" class="file-name" role="status" aria-live="polite"></span>
             <label id="sage-wrap" class="sage-option" hidden><input id="sage" name="sage" type="checkbox"> Sage (don’t bump thread)</label>
           </div>
@@ -79,7 +79,7 @@
 
     <section class="transparency" aria-label="Privacy and retention information">
       <div class="transparency-heading"><span class="privacy-icon" aria-hidden="true">◌</span><div><strong>Anonymous by design</strong><span>What this site keeps</span></div></div>
-      <p>Image conversion and compression happen in your browser; only the finished image is uploaded. S-chan does not store IP addresses, browser user-agent strings, device fingerprints, poster cookies, or account links in its application data. Cloudflare’s zone analytics can expose source IPs and request details to the site operator, and Cloudflare retains sampled HTTP request analytics for at least 31 days. The operator could correlate traffic metadata with post times, so this is not a promise that comments cannot be traced back to a visitor.</p>
+      <p>Image conversion and compression happen in your browser and remove embedded photo metadata, including EXIF, location fields, XMP, profiles, and comments; only the finished image is uploaded. S-chan does not store IP addresses, browser user-agent strings, device fingerprints, poster cookies, or account links in its application data. Cloudflare’s zone analytics can expose source IPs and request details to the site operator, and Cloudflare retains sampled HTTP request analytics for at least 31 days. The operator could correlate traffic metadata with post times, so this is not a promise that comments cannot be traced back to a visitor.</p>
       <p>Posts stay until automatic capacity pruning removes an older thread. There is no manual deletion tool. Keep personal details out of posts.</p>
     </section>
   </main>

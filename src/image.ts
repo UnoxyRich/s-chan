@@ -38,7 +38,7 @@ function stripPng(input: Uint8Array): Uint8Array {
   const signature = [0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a];
   if (!startsWith(input, signature)) throw new ImageError("That file is not a valid PNG image.");
   const chunks: Uint8Array[] = [input.slice(0, 8)];
-  const renderAncillary = new Set(["tRNS", "gAMA", "cHRM", "sRGB", "sBIT", "bKGD", "hIST", "cICP", "mDCv", "cLLI"]);
+  const renderAncillary = new Set(["tRNS"]);
   const critical = new Set(["IHDR", "PLTE", "IDAT", "IEND"]);
   let offset = 8;
   let hasHeader = false;

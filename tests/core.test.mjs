@@ -30,6 +30,12 @@ function tinyPng() {
     signature,
     pngChunk("IHDR", header),
     pngChunk("tEXt", Buffer.from("Comment\0private metadata")),
+    pngChunk("iTXt", Buffer.from("XML:com.adobe.xmp\0\0\0\0\0<xmpmeta/>")),
+    pngChunk("iCCP", Buffer.from("ICC Profile\0\0profile data")),
+    pngChunk("eXIf", Buffer.from("Exif\0\0camera metadata")),
+    pngChunk("pHYs", Buffer.from([0, 0, 0, 1, 0, 0, 0, 1, 1])),
+    pngChunk("tIME", Buffer.from([0x07, 0xea, 1, 1, 0, 0, 0])),
+    pngChunk("zTXt", Buffer.from("Comment\0\0compressed text")),
     pngChunk("IDAT", deflateSync(pixels)),
     pngChunk("IEND", Buffer.alloc(0)),
   ]);
@@ -41,8 +47,11 @@ test("PNG sanitizer validates integrity and removes metadata", () => {
   const source = tinyPng();
   const cleaned = cleanImage(source);
   assert.equal(cleaned.mimeType, "image/png");
-  assert.equal(Buffer.from(cleaned.bytes).includes(Buffer.from("tEXt")), false);
-  assert.equal(Buffer.from(cleaned.bytes).includes(Buffer.from("IDAT")), true);
+  const cleanedBytes = Buffer.from(cleaned.bytes);
+  for (const metadataChunk of ["tEXt", "iTXt", "iCCP", "eXIf", "pHYs", "tIME", "zTXt"]) {
+    assert.equal(cleanedBytes.includes(Buffer.from(metadataChunk)), false, `${metadataChunk} metadata survived`);
+  }
+  assert.equal(cleanedBytes.includes(Buffer.from("IDAT")), true);
 
   source[source.length - 5] ^= 1;
   assert.throws(() => cleanImage(source), /integrity check/);

@@ -10,7 +10,7 @@
     "deploy": "npm run build && wrangler deploy",
     "db:local": "wrangler d1 migrations apply s-chan --local",
     "db:remote": "wrangler d1 migrations apply s-chan --remote",
-    "test": "esbuild src/image.ts src/duplicates.ts --bundle --format=esm --outdir=.test-build --out-extension:.js=.mjs && node --test tests/*.test.mjs",
+    "test": "npm run build && esbuild src/image.ts src/duplicates.ts --bundle --format=esm --outdir=.test-build --out-extension:.js=.mjs && node --test tests/*.test.mjs",
     "test:integration": "node tests/integration.mjs"
   },
   "devDependencies": {

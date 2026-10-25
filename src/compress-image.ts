@@ -9,12 +9,12 @@ let initialized: Promise<void> | undefined;
 async function initialize(): Promise<void> {
   if (!initialized) {
     initialized = (async () => {
-      ResourceLimits.area = BigInt(MAX_PIXELS);
-      ResourceLimits.width = 12_000n;
-      ResourceLimits.height = 12_000n;
       const response = await fetch(wasmUrl, { cache: "force-cache", credentials: "same-origin" });
       if (!response.ok) throw new Error("The image tools could not be loaded. Refresh and try again.");
       await initializeImageMagick(new Uint8Array(await response.arrayBuffer()));
+      ResourceLimits.area = BigInt(MAX_PIXELS);
+      ResourceLimits.width = 12_000n;
+      ResourceLimits.height = 12_000n;
     })();
   }
   return initialized;
@@ -45,20 +45,17 @@ export async function compressImage(file: File): Promise<File> {
     }
     image.strip();
 
-    let best: Uint8Array | null = null;
-    const qualities = [82, 74, 66, 58, 50, 42, 34, 26, 20];
+    const qualities = [82, 66, 50, 34, 20];
     for (let scaleStep = 0; scaleStep < 10; scaleStep += 1) {
       for (const quality of qualities) {
         const encoded = encodeWebp(image, quality);
         if (encoded.byteLength <= MAX_OUTPUT_BYTES) return encoded;
-        if (!best || encoded.byteLength < best.byteLength) best = encoded;
       }
       if (width <= 240 && height <= 240) break;
       width = Math.max(1, Math.round(width * 0.82));
       height = Math.max(1, Math.round(height * 0.82));
       image.resize(width, height);
     }
-    if (best && best.byteLength <= MAX_OUTPUT_BYTES) return best;
     throw new Error("This image could not be compressed below 2 MB.");
   });
   if (!(output instanceof Uint8Array) || output.byteLength > MAX_OUTPUT_BYTES) {

@@ -205,14 +205,14 @@ postImage.addEventListener('change', () => {
   compressedImage = null;
   imageStatus.textContent = '';
   if (!file) {
-    fileName.textContent = '30+ formats · 20 MB source · compressed to 2 MB';
+    fileName.textContent = '30+ formats · metadata removed · compressed to 2 MB';
     imageCompression = Promise.resolve(null);
     return;
   }
   if (file.size > 20 * 1024 * 1024) {
     postImage.value = '';
     selectedImage = null;
-    fileName.textContent = '30+ formats · 20 MB source · compressed to 2 MB';
+    fileName.textContent = '30+ formats · metadata removed · compressed to 2 MB';
     showMessage('Choose an image under 20 MB. It will be compressed to 2 MB before upload.', true);
     return;
   }
@@ -296,7 +296,7 @@ async function submitPost(confirmSimilar = false) {
     selectedImage = null;
     compressedImage = null;
     imageCompression = Promise.resolve(null);
-    fileName.textContent = '30+ formats · 20 MB source · compressed to 2 MB';
+    fileName.textContent = '30+ formats · metadata removed · compressed to 2 MB';
     imageStatus.textContent = '';
     $('#char-count').textContent = '0 / 2,000';
     showMessage('Posted.');
