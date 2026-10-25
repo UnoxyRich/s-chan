@@ -17,7 +17,11 @@ const boardResponse = await fetch(`${base}/general/`, { redirect: "manual" });
 assert.equal(boardResponse.status, 200);
 const boardHtml = await boardResponse.text();
 assert.ok(boardHtml.includes("Not affiliated with or endorsed by any school, club, or organization."));
-assert.ok(boardHtml.includes("The operator could correlate traffic metadata with post times"));
+const faqResponse = await fetch(`${base}/faq.html`);
+assert.equal(faqResponse.status, 200);
+const faqHtml = await faqResponse.text();
+assert.ok(faqHtml.includes("The operator could correlate request times with posts"));
+assert.ok(faqHtml.includes("removes embedded metadata such as EXIF location"));
 
 async function post(path, { text, image, sage = false, confirmSimilar = false } = {}) {
   const form = new FormData();
@@ -185,7 +189,7 @@ for (const metadata of ["ICCP", "EXIF", "XMP "]) {
 
 const pages = await expectJson(await fetch(`${base}/api/threads?page=1`), 200);
 assert.equal(pages.pageSize, 15);
-assert.equal(pages.totalThreads, Math.min(initialThreadCount + 5, 150));
+assert.equal(pages.totalThreads, Math.min(initialThreadCount + 6, 150));
 
 for (let index = 0; index < 151; index += 1) {
   const response = await post("/api/threads", { text: `Capacity pruning integration thread ${runId} ${index}`, confirmSimilar: true });

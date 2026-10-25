@@ -63,6 +63,7 @@ function makeThreadCard(thread) {
   const article = document.createElement('article');
   article.className = 'thread-card';
   const content = document.createElement('div');
+  content.className = 'thread-content';
   const meta = document.createElement('div');
   meta.className = 'thread-meta';
   const number = document.createElement('a');
@@ -77,7 +78,7 @@ function makeThreadCard(thread) {
   meta.append(number, author, time);
   const body = document.createElement('p');
   body.className = 'thread-body';
-  makeQuoteText(body, thread.body || (thread.imageUrl ? '[Image post]' : ''));
+  makeQuoteText(body, thread.body || (thread.imageUrl ? '[Image]' : ''));
   const bottom = document.createElement('div');
   bottom.className = 'thread-bottom';
   const replies = document.createElement('span');
@@ -86,12 +87,12 @@ function makeThreadCard(thread) {
   const reply = document.createElement('a');
   reply.className = 'reply-link';
   reply.href = `/general/?thread=${encodeURIComponent(thread.threadId)}#post-form-section`;
-  reply.textContent = 'Open thread →';
+  reply.textContent = 'View Thread';
   bottom.append(replies, reply);
   content.append(meta, body, bottom);
-  article.append(content);
   const image = imageElement(thread.imageUrl, `Image attached to post ${thread.postNo}`, 'thread-thumb');
   if (image) article.append(image);
+  article.append(content);
   return article;
 }
 
@@ -116,7 +117,7 @@ function makePost(post) {
   if (post.isOp) {
     const label = document.createElement('span');
     label.className = 'post-label';
-    label.textContent = 'THREAD OP';
+    label.textContent = 'OP';
     meta.append(label);
   }
   if (post.sage) {
@@ -127,7 +128,7 @@ function makePost(post) {
   }
   const body = document.createElement('p');
   body.className = 'post-body';
-  makeQuoteText(body, post.body || (post.imageUrl ? '[Image post]' : ''));
+  makeQuoteText(body, post.body || (post.imageUrl ? '[Image]' : ''));
   main.append(meta, body);
   const image = imageElement(post.imageUrl, `Image attached to post ${post.postNo}`, 'post-image');
   if (image) main.append(image);
@@ -168,9 +169,9 @@ async function loadThread(threadId) {
   const data = await response.json();
   boardView.hidden = true;
   threadView.hidden = false;
+  $('#thread-view-title').textContent = `No. ${data.thread.threadNo}`;
   $('#thread-count').textContent = `${data.posts.length - 1} / ${data.replyLimit} replies`;
   threadPosts.replaceChildren(...data.posts.map(makePost));
-  $('#compose-kicker').textContent = 'REPLY TO THREAD';
   $('#compose-title').textContent = `Reply to No. ${data.thread.threadNo}`;
   $('#submit-label').textContent = 'Post reply';
   $('#sage-wrap').hidden = false;

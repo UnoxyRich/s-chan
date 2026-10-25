@@ -7,83 +7,69 @@
   <meta name="description" content="S-chan is an independent anonymous imageboard.">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' blob:; style-src 'self'; script-src 'self' 'wasm-unsafe-eval'; connect-src 'self'; form-action 'self'; base-uri 'none'; frame-ancestors 'none'">
   <title>S-chan — /general/</title>
-  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="/s-chan-logo.png" type="image/png">
   <link rel="stylesheet" href="/styles.css">
   <script src="/app.js" defer></script>
 </head>
 <body>
   <header class="site-header">
-    <div class="header-inner">
-      <a class="brand" href="/general/" aria-label="S-chan home">S-chan<span> /g/</span></a>
-      <nav aria-label="Board navigation"><a class="current" href="/general/">/general/</a></nav>
-      <a class="new-post-link" href="#post-form">New post <span aria-hidden="true">↗</span></a>
-    </div>
+    <a class="brand" href="/general/" aria-label="S-chan home">
+      <img src="/s-chan-logo.png" alt="">
+      <span>S-chan</span>
+    </a>
+    <nav class="top-links" aria-label="Main navigation">
+      <a class="current" href="/general/">/general/</a>
+      <a href="/faq.html">FAQ</a>
+    </nav>
+    <a class="new-post-link" href="#post-form-section">Post</a>
   </header>
 
-  <main class="page-shell">
-    <section class="notice" aria-label="Site notice">
-      <span class="notice-mark" aria-hidden="true">!</span>
-      <p><strong>Independent community site.</strong> Not affiliated with or endorsed by any school, club, or organization.</p>
-    </section>
+  <p class="notice">Independent community site. Not affiliated with or endorsed by any school, club, or organization.</p>
 
-    <section class="board-heading">
-      <div>
-        <div class="eyebrow">ONE BOARD · POSTS ARE ANONYMOUS</div>
-        <h1>/general/</h1>
-        <p class="board-subtitle">Talk about anything. Keep it decent.</p>
-      </div>
-      <div class="board-stats" aria-live="polite"><strong id="thread-total">—</strong><span>active threads</span></div>
-    </section>
+  <main class="page-shell">
+    <h1 class="board-title">/general/</h1>
+    <nav class="board-nav" aria-label="Board navigation"><a href="#thread-list-title">Threads</a> / <a href="#post-form-section">Post</a></nav>
 
     <section class="compose-card" id="post-form-section" aria-labelledby="compose-title">
-      <div class="compose-head">
-        <div><div class="eyebrow" id="compose-kicker">START A THREAD</div><h2 id="compose-title">Post anonymously</h2></div>
-        <span class="anon-chip"><span aria-hidden="true">◉</span> Anonymous</span>
-      </div>
+      <h2 id="compose-title" class="compose-title">Start a New Thread</h2>
+      <div class="name-row"><span>Name</span><strong>Anonymous</strong></div>
       <form id="post-form" enctype="multipart/form-data">
-        <label class="sr-only" for="post-text">Message</label>
-        <textarea id="post-text" name="text" maxlength="2000" rows="4" placeholder="What's on your mind? Use &gt;&gt;post-number to quote." autocomplete="off"></textarea>
+        <label class="sr-only" for="post-text">Comment</label>
+        <textarea id="post-text" name="text" maxlength="2000" rows="4" placeholder="Comment" autocomplete="off"></textarea>
         <div class="form-footer">
-        <div class="form-tools">
-            <label class="file-picker" for="post-image"><span aria-hidden="true">＋</span> Add image</label>
+          <div class="form-tools">
+            <label class="file-picker" for="post-image">File</label>
             <input id="post-image" name="image" type="file" accept=".jpg,.jpeg,.jpe,.pjpeg,.png,.apng,.gif,.webp,.bmp,.dib,.tif,.tiff,.ptif,.avif,.heic,.heif,.svg,.svgz,.jng,.jp2,.j2k,.j2c,.jpc,.jpt,.jpm,.jps,.mpo,.pbm,.pgm,.ppm,.pnm,.pam,.wbmp" hidden>
-            <span id="file-name" class="file-name">30+ formats · metadata removed · compressed to 2 MB</span>
-            <span id="image-status" class="file-name" role="status" aria-live="polite"></span>
-            <label id="sage-wrap" class="sage-option" hidden><input id="sage" name="sage" type="checkbox"> Sage (don’t bump thread)</label>
+            <span id="file-name" class="file-name">Metadata stripped · 2 MB max</span>
+            <span id="image-status" class="image-status" role="status" aria-live="polite"></span>
+            <label id="sage-wrap" class="sage-option" hidden><input id="sage" name="sage" type="checkbox"> Sage</label>
           </div>
-          <div class="submit-tools"><span id="char-count" class="char-count">0 / 2,000</span><button class="primary-button" type="submit"><span id="submit-label">Post thread</span><span aria-hidden="true">→</span></button></div>
+          <div class="submit-tools"><span id="char-count" class="char-count">0 / 2,000</span><button class="primary-button" type="submit"><span id="submit-label">Post</span></button></div>
         </div>
       </form>
       <div id="form-message" class="form-message" role="status" aria-live="polite" hidden></div>
       <div id="duplicate-warning" class="duplicate-warning" role="alert" hidden>
-        <div class="warning-icon" aria-hidden="true">↻</div>
-        <div class="warning-copy"><strong>Similar post found</strong><p id="duplicate-copy"></p><a id="duplicate-link" href="#">View matching post</a></div>
-        <div class="warning-actions"><button id="edit-post" class="text-button" type="button">Edit</button><button id="post-anyway" class="small-button" type="button">Post anyway</button></div>
+        <strong>Similar post found.</strong>
+        <span id="duplicate-copy"></span>
+        <a id="duplicate-link" href="#">View post</a>
+        <button id="edit-post" class="text-button" type="button">Edit</button>
+        <button id="post-anyway" class="small-button" type="button">Post anyway</button>
       </div>
     </section>
 
     <section id="board-view" aria-labelledby="thread-list-title">
-      <div class="section-heading">
-        <div><div class="eyebrow">BUMP ORDER</div><h2 id="thread-list-title">Active threads</h2></div>
-        <button id="refresh-board" class="refresh-button" type="button" aria-label="Refresh threads">↻ <span>Refresh</span></button>
-      </div>
+      <div class="section-heading"><h2 id="thread-list-title">Threads <span id="thread-total" class="thread-total"></span></h2><button id="refresh-board" class="refresh-button" type="button" aria-label="Refresh threads">Refresh</button></div>
       <div id="thread-list" class="thread-list" aria-live="polite"></div>
-      <div id="empty-state" class="empty-state" hidden><span aria-hidden="true">✳</span><h3>It’s quiet here.</h3><p>Start the first thread on /general/.</p></div>
+      <div id="empty-state" class="empty-state" hidden>No threads yet. Start one above.</div>
       <nav id="pagination" class="pagination" aria-label="Thread pages"></nav>
     </section>
 
     <section id="thread-view" hidden aria-labelledby="thread-view-title">
-      <div class="thread-toolbar"><a class="back-link" href="/general/">← All threads</a><span class="thread-count" id="thread-count"></span></div>
+      <div class="thread-toolbar"><a class="back-link" href="/general/">Return</a><h2 id="thread-view-title" class="thread-count"></h2><span id="thread-count" class="thread-count"></span></div>
       <div id="thread-posts" class="thread-posts"></div>
-    </section>
-
-    <section class="transparency" aria-label="Privacy and retention information">
-      <div class="transparency-heading"><span class="privacy-icon" aria-hidden="true">◌</span><div><strong>Anonymous by design</strong><span>What this site keeps</span></div></div>
-      <p>Image conversion and compression happen in your browser and remove embedded photo metadata, including EXIF, location fields, XMP, profiles, and comments; only the finished image is uploaded. S-chan does not store IP addresses, browser user-agent strings, device fingerprints, poster cookies, or account links in its application data. Cloudflare’s zone analytics can expose source IPs and request details to the site operator, and Cloudflare retains sampled HTTP request analytics for at least 31 days. The operator could correlate traffic metadata with post times, so this is not a promise that comments cannot be traced back to a visitor.</p>
-      <p>Posts stay until automatic capacity pruning removes an older thread. There is no manual deletion tool. Keep personal details out of posts.</p>
     </section>
   </main>
 
-  <footer class="site-footer"><span>S-chan · /general/</span><span>Independent community project</span></footer>
+  <footer class="site-footer"><a href="/general/">/general/</a><a href="/faq.html">FAQ</a></footer>
 </body>
 </html>

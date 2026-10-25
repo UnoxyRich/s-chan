@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="referrer" content="no-referrer">
+  <meta name="description" content="S-chan posting, image, and privacy information.">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self'; style-src 'self'; script-src 'self'; connect-src 'self'; form-action 'self'; base-uri 'none'; frame-ancestors 'none'">
+  <title>S-chan — FAQ</title>
+  <link rel="icon" href="/s-chan-logo.png" type="image/png">
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="/general/" aria-label="S-chan home">
+      <img src="/s-chan-logo.png" alt="">
+      <span>S-chan</span>
+    </a>
+    <nav class="top-links" aria-label="Main navigation">
+      <a href="/general/">/general/</a>
+      <a class="current" href="/faq.html">FAQ</a>
+    </nav>
+    <a class="new-post-link" href="/general/#post-form-section">Post</a>
+  </header>
+
+  <p class="notice">Independent community site. Not affiliated with or endorsed by any school, club, or organization.</p>
+
+  <main class="page-shell faq-page">
+    <h1 class="board-title">FAQ</h1>
+
+    <section class="faq-section">
+      <h2>What is S-chan?</h2>
+      <p>S-chan is an anonymous imageboard with one board: <a href="/general/">/general/</a>. Posts display as Anonymous. There are no accounts or sign-in.</p>
+    </section>
+
+    <section class="faq-section">
+      <h2>What information does S-chan store?</h2>
+      <p>The app stores post text, public post and thread numbers, timestamps, the sage setting, and image references. It does not store poster IP addresses, browser user-agent strings, device fingerprints, identity cookies, or account-to-post links. Worker observability and invocation logging are disabled.</p>
+      <p>Cloudflare and network providers still process connection details to deliver the site. Cloudflare zone analytics can expose source IPs and request details to the operator, and sampled HTTP request analytics are retained for at least 31 days. The operator could correlate request times with posts. S-chan cannot promise that a post cannot be traced to a visitor.</p>
+    </section>
+
+    <section class="faq-section">
+      <h2>What happens to uploaded images?</h2>
+      <p>Images are converted in your browser before upload. The conversion removes embedded metadata such as EXIF location, camera details, XMP, profiles, comments, and text chunks. The original file is not uploaded. PNG transparency is kept so transparent images display correctly.</p>
+      <p>The picker supports 30+ image filename extensions. Source files can be up to 20 MB; uploads are resized to a 2,048-pixel longest edge and compressed to at most 2 MB. Animated images become still images. Unsupported or malformed files are rejected.</p>
+    </section>
+
+    <section class="faq-section">
+      <h2>How do threads work?</h2>
+      <p>Threads sort by bump time. A reply bumps a thread; a reply posted with <strong>Sage</strong> does not. Threads close after 300 replies. When the board reaches 150 threads, a new thread removes the thread with the oldest bump time and its stored images.</p>
+      <p>Threads do not expire just because they are old. There is no manual post deletion.</p>
+    </section>
+
+    <section class="faq-section">
+      <h2>Why did I see a similar-post warning?</h2>
+      <p>S-chan checks text against posts from the previous 24 hours. It warns on exact matches and near matches with at least 85% character 3-gram similarity. Edit your text or choose <strong>Post anyway</strong> to continue.</p>
+    </section>
+
+    <section class="faq-section">
+      <h2>How do I quote a post?</h2>
+      <p>Type <code>&gt;&gt;123</code> with the post number. Select a quote link to open that post.</p>
+    </section>
+  </main>
+
+  <footer class="site-footer"><a href="/general/">/general/</a><a href="/faq.html">FAQ</a></footer>
+</body>
+</html>
