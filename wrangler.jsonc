@@ -1,0 +1,45 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "s-chan",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-10-25",
+  "workers_dev": false,
+  "assets": {
+    "directory": "./public",
+    "binding": "ASSETS",
+    "run_worker_first": ["/", "/general/*", "/api/*", "/media/*"]
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "s-chan",
+      "database_id": "33db12e3-f4f7-477e-9a8b-5b67ab17c6b1",
+      "migrations_dir": "migrations"
+    }
+  ],
+  "r2_buckets": [
+    {
+      "binding": "IMAGES",
+      "bucket_name": "s-chan-images"
+    }
+  ],
+  "routes": [
+    {
+      "pattern": "s-chan.novibenocode.ccwu.cc",
+      "custom_domain": true
+    }
+  ],
+  "observability": {
+    "enabled": false,
+    "logs": {
+      "enabled": false,
+      "invocation_logs": false
+    },
+    "traces": {
+      "enabled": false
+    },
+    "issues": {
+      "enabled": false
+    }
+  }
+}

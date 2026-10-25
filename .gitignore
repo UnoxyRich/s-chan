@@ -1,0 +1,8 @@
+node_modules/
+.wrangler/
+dist/
+.test-build/
+public/bundle/
+.dev.vars
+.env*
+*.log

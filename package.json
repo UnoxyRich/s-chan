@@ -1,0 +1,26 @@
+{
+  "name": "s-chan",
+  "version": "1.0.0",
+  "private": false,
+  "type": "module",
+  "scripts": {
+    "dev": "npm run build && wrangler dev",
+    "build": "esbuild src/compress-image.ts --bundle --format=esm --outfile=public/bundle/compress-image.js --loader:.wasm=file --asset-names=magick-wasm-[hash]",
+    "check": "npm run build && wrangler deploy --dry-run",
+    "deploy": "npm run build && wrangler deploy",
+    "db:local": "wrangler d1 migrations apply s-chan --local",
+    "db:remote": "wrangler d1 migrations apply s-chan --remote",
+    "test": "esbuild src/image.ts src/duplicates.ts --bundle --format=esm --outdir=.test-build --out-extension:.js=.mjs && node --test tests/*.test.mjs",
+    "test:integration": "node tests/integration.mjs"
+  },
+  "devDependencies": {
+    "esbuild": "^0.28.2",
+    "wrangler": "^4.152.0"
+  },
+  "dependencies": {
+    "@imagemagick/magick-wasm": "^0.0.45"
+  },
+  "overrides": {
+    "undici": "^7.30.1"
+  }
+}

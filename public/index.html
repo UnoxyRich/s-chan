@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="referrer" content="no-referrer">
+  <meta name="description" content="S-chan is an independent anonymous imageboard.">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' blob:; style-src 'self'; script-src 'self' 'wasm-unsafe-eval'; connect-src 'self'; form-action 'self'; base-uri 'none'; frame-ancestors 'none'">
+  <title>S-chan — /general/</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/styles.css">
+  <script src="/app.js" defer></script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="/general/" aria-label="S-chan home">S-chan<span> /g/</span></a>
+      <nav aria-label="Board navigation"><a class="current" href="/general/">/general/</a></nav>
+      <a class="new-post-link" href="#post-form">New post <span aria-hidden="true">↗</span></a>
+    </div>
+  </header>
+
+  <main class="page-shell">
+    <section class="notice" aria-label="Site notice">
+      <span class="notice-mark" aria-hidden="true">!</span>
+      <p><strong>Independent community site.</strong> Not affiliated with or endorsed by any school, club, or organization.</p>
+    </section>
+
+    <section class="board-heading">
+      <div>
+        <div class="eyebrow">ONE BOARD · POSTS ARE ANONYMOUS</div>
+        <h1>/general/</h1>
+        <p class="board-subtitle">Talk about anything. Keep it decent.</p>
+      </div>
+      <div class="board-stats" aria-live="polite"><strong id="thread-total">—</strong><span>active threads</span></div>
+    </section>
+
+    <section class="compose-card" id="post-form-section" aria-labelledby="compose-title">
+      <div class="compose-head">
+        <div><div class="eyebrow" id="compose-kicker">START A THREAD</div><h2 id="compose-title">Post anonymously</h2></div>
+        <span class="anon-chip"><span aria-hidden="true">◉</span> Anonymous</span>
+      </div>
+      <form id="post-form" enctype="multipart/form-data">
+        <label class="sr-only" for="post-text">Message</label>
+        <textarea id="post-text" name="text" maxlength="2000" rows="4" placeholder="What's on your mind? Use &gt;&gt;post-number to quote." autocomplete="off"></textarea>
+        <div class="form-footer">
+        <div class="form-tools">
+            <label class="file-picker" for="post-image"><span aria-hidden="true">＋</span> Add image</label>
+            <input id="post-image" name="image" type="file" accept=".jpg,.jpeg,.jpe,.pjpeg,.png,.apng,.gif,.webp,.bmp,.dib,.tif,.tiff,.ptif,.avif,.heic,.heif,.svg,.svgz,.jng,.jp2,.j2k,.j2c,.jpc,.jpt,.jpm,.jps,.mpo,.pbm,.pgm,.ppm,.pnm,.pam,.wbmp" hidden>
+            <span id="file-name" class="file-name">30+ formats · 20 MB source · compressed to 2 MB</span>
+            <span id="image-status" class="file-name" role="status" aria-live="polite"></span>
+            <label id="sage-wrap" class="sage-option" hidden><input id="sage" name="sage" type="checkbox"> Sage (don’t bump thread)</label>
+          </div>
+          <div class="submit-tools"><span id="char-count" class="char-count">0 / 2,000</span><button class="primary-button" type="submit"><span id="submit-label">Post thread</span><span aria-hidden="true">→</span></button></div>
+        </div>
+      </form>
+      <div id="form-message" class="form-message" role="status" aria-live="polite" hidden></div>
+      <div id="duplicate-warning" class="duplicate-warning" role="alert" hidden>
+        <div class="warning-icon" aria-hidden="true">↻</div>
+        <div class="warning-copy"><strong>Similar post found</strong><p id="duplicate-copy"></p><a id="duplicate-link" href="#">View matching post</a></div>
+        <div class="warning-actions"><button id="edit-post" class="text-button" type="button">Edit</button><button id="post-anyway" class="small-button" type="button">Post anyway</button></div>
+      </div>
+    </section>
+
+    <section id="board-view" aria-labelledby="thread-list-title">
+      <div class="section-heading">
+        <div><div class="eyebrow">BUMP ORDER</div><h2 id="thread-list-title">Active threads</h2></div>
+        <button id="refresh-board" class="refresh-button" type="button" aria-label="Refresh threads">↻ <span>Refresh</span></button>
+      </div>
+      <div id="thread-list" class="thread-list" aria-live="polite"></div>
+      <div id="empty-state" class="empty-state" hidden><span aria-hidden="true">✳</span><h3>It’s quiet here.</h3><p>Start the first thread on /general/.</p></div>
+      <nav id="pagination" class="pagination" aria-label="Thread pages"></nav>
+    </section>
+
+    <section id="thread-view" hidden aria-labelledby="thread-view-title">
+      <div class="thread-toolbar"><a class="back-link" href="/general/">← All threads</a><span class="thread-count" id="thread-count"></span></div>
+      <div id="thread-posts" class="thread-posts"></div>
+    </section>
+
+    <section class="transparency" aria-label="Privacy and retention information">
+      <div class="transparency-heading"><span class="privacy-icon" aria-hidden="true">◌</span><div><strong>Anonymous by design</strong><span>What this site keeps</span></div></div>
+      <p>Image conversion and compression happen in your browser; only the finished image is uploaded. S-chan does not store IP addresses, browser user-agent strings, device fingerprints, poster cookies, or account links in its application data. Cloudflare’s zone analytics can expose source IPs and request details to the site operator, and Cloudflare retains sampled HTTP request analytics for at least 31 days. The operator could correlate traffic metadata with post times, so this is not a promise that comments cannot be traced back to a visitor.</p>
+      <p>Posts stay until automatic capacity pruning removes an older thread. There is no manual deletion tool. Keep personal details out of posts.</p>
+    </section>
+  </main>
+
+  <footer class="site-footer"><span>S-chan · /general/</span><span>Independent community project</span></footer>
+</body>
+</html>
