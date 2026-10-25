@@ -10,6 +10,15 @@ const runId = crypto.randomUUID();
 const before = await (await fetch(`${base}/api/threads?page=1`)).json();
 const initialThreadCount = before.totalThreads;
 
+const rootResponse = await fetch(`${base}/`, { redirect: "manual" });
+assert.equal(rootResponse.status, 308);
+assert.equal(rootResponse.headers.get("location"), `${base}/general/`);
+const boardResponse = await fetch(`${base}/general/`, { redirect: "manual" });
+assert.equal(boardResponse.status, 200);
+const boardHtml = await boardResponse.text();
+assert.ok(boardHtml.includes("Not affiliated with or endorsed by any school, club, or organization."));
+assert.ok(boardHtml.includes("The operator could correlate traffic metadata with post times"));
+
 async function post(path, { text, image, sage = false, confirmSimilar = false } = {}) {
   const form = new FormData();
   if (text !== undefined) form.set("text", text);

@@ -245,7 +245,7 @@ export default {
       if (path === "/") return Response.redirect(new URL(`/general/${url.search}`, url), 308);
       if (path === "/general") return Response.redirect(new URL("/general/", url), 308);
       if (path === "/general/") {
-        const indexRequest = new Request(new URL("/index.html", url), request);
+        const indexRequest = new Request(new URL("/", url), request);
         return secure(await env.ASSETS.fetch(indexRequest), {
           "Content-Security-Policy": "default-src 'self'; img-src 'self' blob:; style-src 'self'; script-src 'self' 'wasm-unsafe-eval'; connect-src 'self'; form-action 'self'; base-uri 'none'; frame-ancestors 'none'",
         });
