@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "npm run build && wrangler dev",
-    "build": "esbuild src/compress-image.ts --bundle --format=esm --outfile=public/bundle/compress-image.js --loader:.wasm=file --asset-names=magick-wasm-[hash]",
+    "build": "node -e \"require('node:fs').rmSync('public/bundle', { recursive: true, force: true })\" && esbuild src/compress-image.ts --bundle --format=esm --outfile=public/bundle/compress-image.js",
     "check": "npm run build && wrangler deploy --dry-run",
     "deploy": "npm run build && wrangler deploy",
     "db:local": "wrangler d1 migrations apply s-chan --local",
@@ -16,9 +16,6 @@
   "devDependencies": {
     "esbuild": "^0.28.2",
     "wrangler": "^4.152.0"
-  },
-  "dependencies": {
-    "@imagemagick/magick-wasm": "^0.0.45"
   },
   "overrides": {
     "undici": "^7.30.1"

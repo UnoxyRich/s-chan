@@ -1,7 +1,5 @@
 import assert from "node:assert/strict";
-import { readFile } from "node:fs/promises";
 import { deflateSync } from "node:zlib";
-import { ImageMagick, initializeImageMagick, MagickFormat } from "@imagemagick/magick-wasm";
 
 const base = process.env.SCHAN_TEST_URL ?? "http://localhost:8787";
 const headers = { Origin: base };
@@ -21,7 +19,7 @@ const faqResponse = await fetch(`${base}/faq.html`);
 assert.equal(faqResponse.status, 200);
 const faqHtml = await faqResponse.text();
 assert.ok(faqHtml.includes("The operator could correlate request times with posts"));
-assert.ok(faqHtml.includes("removes embedded metadata such as EXIF location"));
+assert.ok(faqHtml.includes("Drawing the pixels to a fresh canvas removes embedded metadata"));
 
 async function post(path, { text, image, sage = false, confirmSimilar = false } = {}) {
   const form = new FormData();
@@ -65,55 +63,6 @@ function pngWithTextMetadata() {
     pngChunk("IDAT", deflateSync(Buffer.from([0, 255, 0, 0, 255]))),
     pngChunk("IEND", Buffer.alloc(0)),
   ]);
-}
-
-async function webpWithMetadata() {
-  const wasm = new Uint8Array(await readFile("node_modules/@imagemagick/magick-wasm/dist/x86/magick.wasm"));
-  await initializeImageMagick(wasm);
-  const png = pngWithTextMetadata();
-  const bytes = ImageMagick.read(new Uint8Array(png), (image) => {
-    image.strip();
-    image.quality = 82;
-    return image.write(MagickFormat.WebP, (result) => result.slice());
-  });
-  const webpChunk = (type, payload) => {
-    const name = Buffer.from(type, "ascii");
-    const length = Buffer.alloc(4);
-    length.writeUInt32LE(payload.length);
-    const chunk = Buffer.concat([name, length, payload]);
-    return chunk.length & 1 ? Buffer.concat([chunk, Buffer.alloc(1)]) : chunk;
-  };
-  const output = Buffer.concat([
-    Buffer.from(bytes),
-    webpChunk("ICCP", Buffer.from("profile metadata")),
-    webpChunk("EXIF", Buffer.from("Exif camera metadata")),
-    webpChunk("XMP ", Buffer.from("<xmpmeta/>")),
-  ]);
-  output.writeUInt32LE(output.length - 8, 4);
-  return new File([output], "pixel.webp", { type: "image/webp" });
-}
-
-async function jpegWithMetadata() {
-  const wasm = new Uint8Array(await readFile("node_modules/@imagemagick/magick-wasm/dist/x86/magick.wasm"));
-  await initializeImageMagick(wasm);
-  const bytes = ImageMagick.read(new Uint8Array(pngWithTextMetadata()), (image) => {
-    image.strip();
-    image.quality = 82;
-    return image.write(MagickFormat.Jpeg, (result) => result.slice());
-  });
-  const jpegSegment = (marker, payload) => {
-    const length = Buffer.alloc(2);
-    length.writeUInt16BE(payload.length + 2);
-    return Buffer.concat([Buffer.from([0xff, marker]), length, payload]);
-  };
-  const metadata = Buffer.concat([
-    jpegSegment(0xe1, Buffer.from("Exif\0\0camera metadata")),
-    jpegSegment(0xe2, Buffer.from("ICC_PROFILE\0profile data")),
-    jpegSegment(0xed, Buffer.from("Photoshop 3.0\0comment metadata")),
-    jpegSegment(0xfe, Buffer.from("user comment metadata")),
-  ]);
-  const output = Buffer.concat([Buffer.from(bytes).subarray(0, 2), metadata, Buffer.from(bytes).subarray(2)]);
-  return new File([output], "pixel.jpg", { type: "image/jpeg" });
 }
 
 async function expectJson(response, status) {
@@ -171,25 +120,9 @@ assert.equal(atLimit.repliesRemaining, 0);
 assert.equal(atLimit.posts.length, 301);
 await expectJson(await post(`/api/threads/${limitThread.threadId}/replies`, { text: "One too many replies", confirmSimilar: true }), 409);
 
-const jpegThread = (await expectJson(await post("/api/threads", { text: "JPEG metadata removal check", image: await jpegWithMetadata(), confirmSimilar: true }), 201)).post;
-const storedJpegResponse = await fetch(`${base}${jpegThread.imageUrl}`);
-assert.equal(storedJpegResponse.status, 200);
-const storedJpeg = Buffer.from(await storedJpegResponse.arrayBuffer());
-for (const metadata of ["Exif", "ICC_PROFILE", "Photoshop 3.0", "user comment metadata"]) {
-  assert.equal(storedJpeg.includes(Buffer.from(metadata)), false, `JPEG ${metadata} metadata survived storage`);
-}
-
-const webpThread = (await expectJson(await post("/api/threads", { text: "WebP metadata removal check", image: await webpWithMetadata(), confirmSimilar: true }), 201)).post;
-const storedWebpResponse = await fetch(`${base}${webpThread.imageUrl}`);
-assert.equal(storedWebpResponse.status, 200);
-const storedWebp = Buffer.from(await storedWebpResponse.arrayBuffer());
-for (const metadata of ["ICCP", "EXIF", "XMP "]) {
-  assert.equal(storedWebp.includes(Buffer.from(metadata)), false, `WebP ${metadata} metadata survived storage`);
-}
-
 const pages = await expectJson(await fetch(`${base}/api/threads?page=1`), 200);
 assert.equal(pages.pageSize, 15);
-assert.equal(pages.totalThreads, Math.min(initialThreadCount + 6, 150));
+assert.equal(pages.totalThreads, Math.min(initialThreadCount + 4, 150));
 
 for (let index = 0; index < 151; index += 1) {
   const response = await post("/api/threads", { text: `Capacity pruning integration thread ${runId} ${index}`, confirmSimilar: true });

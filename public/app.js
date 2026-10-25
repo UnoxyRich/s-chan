@@ -206,20 +206,20 @@ postImage.addEventListener('change', () => {
   compressedImage = null;
   imageStatus.textContent = '';
   if (!file) {
-    fileName.textContent = '30+ formats · metadata removed · compressed to 2 MB';
+    fileName.textContent = 'Images · metadata removed · 2 MB max';
     imageCompression = Promise.resolve(null);
     return;
   }
   if (file.size > 20 * 1024 * 1024) {
     postImage.value = '';
     selectedImage = null;
-    fileName.textContent = '30+ formats · metadata removed · compressed to 2 MB';
+    fileName.textContent = 'Images · metadata removed · 2 MB max';
     showMessage('Choose an image under 20 MB. It will be compressed to 2 MB before upload.', true);
     return;
   }
   showMessage('');
   fileName.textContent = `${file.name} · ${(file.size / 1024 / 1024).toFixed(2)} MB source`;
-  imageStatus.textContent = 'Loading private image tools…';
+  imageStatus.textContent = 'Preparing image…';
   const currentFile = file;
   imageCompression = import('/bundle/compress-image.js')
     .then((module) => module.compressImage(currentFile))
@@ -297,7 +297,7 @@ async function submitPost(confirmSimilar = false) {
     selectedImage = null;
     compressedImage = null;
     imageCompression = Promise.resolve(null);
-    fileName.textContent = '30+ formats · metadata removed · compressed to 2 MB';
+    fileName.textContent = 'Images · metadata removed · 2 MB max';
     imageStatus.textContent = '';
     $('#char-count').textContent = '0 / 2,000';
     showMessage('Posted.');

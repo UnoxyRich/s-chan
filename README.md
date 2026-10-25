@@ -16,11 +16,9 @@ Posts display as **Anonymous**. There is no account sign-in, voting, moderator i
 
 ## Image handling
 
-The upload picker accepts 30+ filename extensions for raster, vector, and camera image formats supported by the bundled ImageMagick WebAssembly build, including JPEG/JFIF, PNG/APNG, GIF, WebP, BMP, TIFF, AVIF, HEIC/HEIF, SVG/SVGZ, JPEG 2000, PNM-family, JNG, and WBMP variants. Actual decoder availability depends on the compiled ImageMagick build; unsupported or malformed files are rejected with a message.
+The image picker accepts image files that the visitor's browser can decode. Supported formats depend on the browser; unsupported or damaged files are rejected with a message.
 
-The browser processes the selected image locally. Source files up to 20 MiB are oriented, stripped of embedded metadata (including EXIF, XMP, profiles, comments, and text chunks), resized to at most 2,048 pixels on the longest edge, and encoded as WebP at a quality/resolution that fits the 2 MiB upload limit. The original file is not uploaded. Animated formats are reduced to a still image. The Worker strips metadata from accepted JPEG, PNG, and WebP uploads again before storing the result in R2; PNG transparency data is retained so transparent images still render correctly.
-
-The WebAssembly codec is loaded from this site only when someone selects an image. The library is Apache-2.0 licensed; see [`third_party/`](third_party/) for its license and notice.
+The browser decodes the selected image and draws it to a fresh canvas. This removes embedded metadata, preserves transparency, resizes the image to at most 2,048 pixels on the longest edge, and encodes WebP to fit the 2 MiB upload limit. Source files can be up to 20 MiB. Animated images become still images. The original file is not uploaded. The Worker strips metadata from accepted JPEG, PNG, and WebP uploads again before storing the result in R2.
 
 ## Privacy and storage
 
@@ -42,7 +40,7 @@ npm run db:local
 npm run dev
 ```
 
-Open <http://localhost:8787/general/>. Image tools are built into `public/bundle/` by the `build`, `dev`, `check`, and `deploy` scripts; that generated directory is ignored by Git.
+Open <http://localhost:8787/general/>. The client-side image helper is built into `public/bundle/` by the `build`, `dev`, `check`, and `deploy` scripts; that generated directory is ignored by Git.
 
 Run unit checks with `npm test`. For the API lifecycle checks, start `npm run dev` in one terminal and run `npm run test:integration` in another. The integration script writes and prunes local test posts.
 

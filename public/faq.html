@@ -41,8 +41,8 @@
 
     <section class="faq-section">
       <h2>What happens to uploaded images?</h2>
-      <p>Images are converted in your browser before upload. The conversion removes embedded metadata such as EXIF location, camera details, XMP, profiles, comments, and text chunks. The original file is not uploaded. PNG transparency is kept so transparent images display correctly.</p>
-      <p>The picker supports 30+ image filename extensions. Source files can be up to 20 MB; uploads are resized to a 2,048-pixel longest edge and compressed to at most 2 MB. Animated images become still images. Unsupported or malformed files are rejected.</p>
+      <p>Images are decoded and converted in your browser with its built-in image and canvas APIs. Drawing the pixels to a fresh canvas removes embedded metadata; the original file is not uploaded. Transparency is preserved.</p>
+      <p>Supported image formats depend on your browser. Source files can be up to 20 MB; images are resized to a 2,048-pixel longest edge and compressed to at most 2 MB. Animated images become still images. Unsupported or damaged files are rejected.</p>
     </section>
 
     <section class="faq-section">
