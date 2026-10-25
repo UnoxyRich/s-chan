@@ -1,5 +1,9 @@
 import { ImageMagick, initializeImageMagick, Magick, MagickFormat, ResourceLimits } from "@imagemagick/magick-wasm";
-import wasmUrl from "@imagemagick/magick-wasm/magick.wasm";
+import wasmAssetPath from "@imagemagick/magick-wasm/magick.wasm";
+
+// esbuild emits the WASM asset as a relative filename. Resolve it beside this
+// module so board routes such as /general/ do not turn it into /general/<wasm>.
+const wasmUrl = new URL(wasmAssetPath, import.meta.url);
 
 const MAX_OUTPUT_BYTES = 2 * 1024 * 1024;
 const MAX_EDGE = 2048;

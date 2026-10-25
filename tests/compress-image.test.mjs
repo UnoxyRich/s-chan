@@ -55,14 +55,20 @@ test("large image sources are compressed locally to a metadata-free WebP under 2
   assert.ok(wasmName, "WebAssembly image codec was not built");
   const wasmBytes = await readFile(new URL(`../public/bundle/${wasmName}`, import.meta.url));
   const nativeFetch = globalThis.fetch;
-  globalThis.fetch = async (input, init) => String(input).includes("magick-wasm-")
-    ? new Response(wasmBytes, { status: 200 })
-    : nativeFetch(input, init);
+  let wasmRequestUrl;
+  globalThis.fetch = async (input, init) => {
+    if (String(input).includes("magick-wasm-")) {
+      wasmRequestUrl = new URL(String(input));
+      return new Response(wasmBytes, { status: 200 });
+    }
+    return nativeFetch(input, init);
+  };
 
   try {
     const source = noisyPng(2048, 1024);
     assert.ok(source.length > 2 * 1024 * 1024);
     const output = await compressImage(new File([source], "large-noisy.png", { type: "image/png" }));
+    assert.equal(wasmRequestUrl?.pathname.split("/").slice(-2).join("/"), `bundle/${wasmName}`);
     const bytes = Buffer.from(await output.arrayBuffer());
     assert.equal(output.type, "image/webp");
     assert.ok(output.size <= 2 * 1024 * 1024);
