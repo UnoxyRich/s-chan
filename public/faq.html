@@ -42,7 +42,7 @@
     <section class="faq-section">
       <h2>What happens to uploaded images?</h2>
       <p>Images are decoded and converted in your browser with its built-in image and canvas APIs. Drawing the pixels to a fresh canvas removes embedded metadata; the original file is not uploaded. Transparency is preserved.</p>
-      <p>Supported image formats depend on your browser. Source files can be up to 20 MB; images are resized to a 2,048-pixel longest edge and compressed to at most 2 MB. Animated images become still images. Unsupported or damaged files are rejected.</p>
+      <p>Supported image formats depend on your browser. Source files can be up to 20 MB; images are resized to a 2,048-pixel longest edge and compressed to at most 2 MB. Older browsers use fallback image and canvas APIs; PNG is used when WebP encoding is unavailable. Animated images become still images. Unsupported or damaged files are rejected.</p>
     </section>
 
     <section class="faq-section">

@@ -18,7 +18,7 @@ Posts display as **Anonymous**. There is no account sign-in, voting, moderator i
 
 The image picker accepts image files that the visitor's browser can decode. Supported formats depend on the browser; unsupported or damaged files are rejected with a message.
 
-The browser decodes the selected image and draws it to a fresh canvas. This removes embedded metadata, preserves transparency, resizes the image to at most 2,048 pixels on the longest edge, and encodes WebP to fit the 2 MiB upload limit. Source files can be up to 20 MiB. Animated images become still images. The original file is not uploaded. The Worker strips metadata from accepted JPEG, PNG, and WebP uploads again before storing the result in R2.
+The browser decodes the selected image and draws it to a fresh canvas. This removes embedded metadata, preserves transparency, resizes the image to at most 2,048 pixels on the longest edge, and encodes WebP to fit the 2 MiB upload limit. If WebP encoding is unavailable, it falls back to PNG and resizes further as needed. Older browsers use an image-element decoder and a data-URL canvas export when newer APIs are missing. Source files can be up to 20 MiB. Animated images become still images. The original file is not uploaded. The Worker strips metadata from accepted JPEG, PNG, and WebP uploads again before storing the result in R2.
 
 ## Privacy and storage
 

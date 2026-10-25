@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "npm run build && wrangler dev",
-    "build": "node -e \"require('node:fs').rmSync('public/bundle', { recursive: true, force: true })\" && esbuild src/compress-image.ts --bundle --format=esm --outfile=public/bundle/compress-image.js",
+    "build": "node -e \"require('node:fs').rmSync('public/bundle', { recursive: true, force: true })\" && esbuild src/compress-image.ts --bundle --format=esm --target=chrome55 --outfile=public/bundle/compress-image.js && esbuild src/app.js --bundle --format=iife --target=chrome55 --outfile=public/app.js",
     "check": "npm run build && wrangler deploy --dry-run",
     "deploy": "npm run build && wrangler deploy",
     "db:local": "wrangler d1 migrations apply s-chan --local",
